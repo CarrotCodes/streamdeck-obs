@@ -127,7 +127,7 @@ Usage: %B${functrace[1]%:*}%b <option> [<options>]
     "$(jq -r '. | {name, version} | join(" ")' ${project_root}/buildspec.json)"
 
   if [[ ${host_os} == 'macos' ]] {
-    autoload -Uz check_packages check_xcnotary read_codesign read_codesign_installer read_codesign_pass
+    autoload -Uz check_packages read_codesign read_codesign_installer read_codesign_pass
 
     local output_name="${product_name}-${product_version}-${host_os}-${target##*-}.pkg"
 
@@ -163,11 +163,9 @@ Usage: %B${functrace[1]%:*}%b <option> [<options>]
     }
 
     if (( ${+CODESIGN} && ${+NOTARIZE} )) {
-      check_xcnotary
-
       local _error=0
-      if [[ -f "${project_root}/release/${output_name}" ]] {
-        xcnotary precheck "${project_root}/release/${output_name}" || _error=1
+      NOTARIZE_TARGET="${project_root}/release/${output_name}"
+      if [[ -f "${NOTARIZE_TARGET}" ]] {
       } else {
         log_error "No package for notarization found."
         return 2
@@ -177,10 +175,11 @@ Usage: %B${functrace[1]%:*}%b <option> [<options>]
         read_codesign_installer
         read_codesign_pass
 
-        xcnotary notarize "${project_root}/release/${output_name}" \
-          --developer-account "${CODESIGN_IDENT_USER}" \
-          --developer-password-keychain-item "OBS-Codesign-Password" \
-          --provider "${CODESIGN_IDENT_SHORT}"
+        log_info "Notarize ${NOTARIZE_TARGET}..."
+        /usr/bin/xcrun notarytool submit "${NOTARIZE_TARGET}" --keychain-profile "OBS-Codesign-Password" --wait
+
+        log_info "Staple the ticket to ${NOTARIZE_TARGET}..."
+        /usr/bin/xcrun stapler staple "${NOTARIZE_TARGET}"
       }
     }
     popd

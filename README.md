@@ -1,5 +1,27 @@
 # OBS Plugin Template
 
+This is a port of Elgato's Stream Deck plugin to OBS' newest plugin template. It isn't endorsed by Elgato. I did it to make an Apple Silicon build of the plugin, for personal use.
+
+Almost all of the source code is linked via the `streamdeck-obs-plugin2` submodule. The plugin entry point changed a little, so there's a copy of the original `module.cpp` with some tweaks, called `plugin-main.cpp`. 
+
+The original plugin repository is here: https://github.com/elgatosf/streamdeck-obs-plugin2
+
+## Builds
+
+### Releases
+
+Tagged builds have releases built for them by OBS' GitHub Workflows.
+
+You can check here for specific release uploads: https://github.com/CarrotCodes/streamdeck-plugintemplate/releases
+
+### Make your own
+
+You can build your own plugin like so:
+* `./.github/scripts/build-macos.zsh`
+* `./.github/scripts/package-macos.zsh`
+
+Then a package will be built in the `release` folder.
+
 ## Introduction
 
 This plugin is meant to make it easy to quickstart development of new OBS plugins. It includes:

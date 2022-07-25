@@ -1,7 +1,7 @@
 #!/bin/bash
+set -o xtrace
 dirty=$(git ls-files --modified)
 
-set +x
 if [[ $dirty ]]; then
 	echo "================================="
     echo "Files were not formatted properly"
