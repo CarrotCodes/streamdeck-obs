@@ -1,0 +1,3 @@
+[submodule "streamdeck-obs-plugin2"]
+	path = streamdeck-obs-plugin2
+	url = https://github.com/elgatosf/streamdeck-obs-plugin2

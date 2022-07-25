@@ -78,6 +78,6 @@
             "qtVersion": 5
         }
     },
-    "name": "obs-plugintemplate",
-    "version": "1.0.0"
+    "name": "StreamDeckPlugin-carrot",
+    "version": "1.1.0"
 }

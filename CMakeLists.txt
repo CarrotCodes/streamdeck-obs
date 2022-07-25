@@ -2,26 +2,55 @@ cmake_minimum_required(VERSION 3.16...3.21)
 
 # Change obs-plugintemplate to your plugin's name in a machine-readable format
 # (e.g.: obs-myawesomeplugin) and set
-project(obs-plugintemplate VERSION 1.0.0)
+project(StreamDeckPlugin-carrot VERSION 1.1.0)
 add_library(${CMAKE_PROJECT_NAME} MODULE)
 
 # Replace `Your Name Here` with the name (yours or your organization's) you want
 # to see as the author of the plugin (in the plugin's metadata itself and in the
 # installers)
-set(PLUGIN_AUTHOR "Your Name Here")
+set(PLUGIN_AUTHOR "Carrot")
 
 # Replace `com.example.obs-plugin-template` with a unique Bundle ID for macOS
 # releases (used both in the installer and when submitting the installer for
 # notarization)
-set(MACOS_BUNDLEID "com.example.${CMAKE_PROJECT_NAME}")
+set(MACOS_BUNDLEID "blog.carrot.${CMAKE_PROJECT_NAME}")
 
 # Replace `me@contoso.com` with the maintainer email address you want to put in
 # Linux packages
-set(LINUX_MAINTAINER_EMAIL "me@mymailhost.com")
+set(LINUX_MAINTAINER_EMAIL "obs@carrot.blog")
 
 # Add your custom source files here - header files are optional and only
 # required for visibility e.g. in Xcode or Visual Studio
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/plugin-main.c)
+target_sources(
+  ${CMAKE_PROJECT_NAME}
+  PRIVATE "src/plugin-main.cpp"
+          "src/handler-obs-frontend.cpp"
+          "streamdeck-obs-plugin2/source/module.hpp"
+          "streamdeck-obs-plugin2/source/server.hpp"
+          "streamdeck-obs-plugin2/source/server.cpp"
+          "streamdeck-obs-plugin2/source/details-popup.cpp"
+          "streamdeck-obs-plugin2/source/details-popup.hpp"
+          "streamdeck-obs-plugin2/source/json-rpc.hpp"
+          "streamdeck-obs-plugin2/source/json-rpc.cpp"
+          "streamdeck-obs-plugin2/source/handlers/handler-system.hpp"
+          "streamdeck-obs-plugin2/source/handlers/handler-system.cpp"
+          "streamdeck-obs-plugin2/source/handlers/handler-obs-frontend.hpp"
+          "streamdeck-obs-plugin2/source/handlers/handler-obs-source.hpp"
+          "streamdeck-obs-plugin2/source/handlers/handler-obs-source.cpp"
+          "streamdeck-obs-plugin2/source/handlers/handler-obs-scene.hpp"
+          "streamdeck-obs-plugin2/source/handlers/handler-obs-scene.cpp")
+
+add_compile_definitions(ASIO_STANDALONE)
+add_compile_definitions(_WEBSOCKETPP_CPP11_STL_)
+target_include_directories(
+  ${CMAKE_PROJECT_NAME}
+  PRIVATE "streamdeck-obs-plugin2/third-party/nlohmann-json/single_include/")
+target_include_directories(
+  ${CMAKE_PROJECT_NAME}
+  PRIVATE "streamdeck-obs-plugin2/third-party/websocketpp/")
+target_include_directories(
+  ${CMAKE_PROJECT_NAME}
+  PRIVATE "streamdeck-obs-plugin2/third-party/asio/asio/include/")
 
 # /!\ TAKE NOTE: No need to edit things past this point /!\
 
@@ -32,23 +61,29 @@ find_qt(COMPONENTS Widgets Core)
 
 configure_file(src/plugin-macros.h.in
                ${CMAKE_SOURCE_DIR}/src/plugin-macros.generated.h)
-
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/plugin-macros.generated.h)
 
 # --- Platform-independent build settings ---
 
 target_include_directories(${CMAKE_PROJECT_NAME}
                            PRIVATE ${CMAKE_SOURCE_DIR}/src)
-
+target_include_directories(
+  ${CMAKE_PROJECT_NAME}
+  PRIVATE ${CMAKE_SOURCE_DIR}/streamdeck-obs-plugin2/source)
+target_include_directories(
+  ${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/streamdeck-obs-plugin2/ui)
 target_link_libraries(
   ${CMAKE_PROJECT_NAME} PRIVATE OBS::libobs OBS::obs-frontend-api Qt::Core
                                 Qt::Widgets)
 
 set_target_properties(
   ${CMAKE_PROJECT_NAME}
-  PROPERTIES AUTOMOC ON
-             AUTOUIC ON
-             AUTORCC ON)
+  PROPERTIES
+    AUTOMOC ON
+    AUTOUIC ON
+    AUTOUIC_SEARCH_PATHS
+    "${PROJECT_SOURCE_DIR};${CMAKE_SOURCE_DIR}/streamdeck-obs-plugin2/source;${CMAKE_SOURCE_DIR}/streamdeck-obs-plugin2/ui"
+    AUTORCC ON)
 
 target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
 
@@ -56,6 +91,9 @@ target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
 
 # --- Windows-specific build settings and tasks ---
 if(OS_WINDOWS)
+  target_sources(${CMAKE_PROJECT_NAME}
+                 PRIVATE streamdeck-obs-plugin2/source/windll.cpp)
+  list(APPEND PROJECT_LIBRARIES Delayimp.lib)
   configure_file(cmake/bundle/windows/installer-Windows.iss.in
                  ${CMAKE_BINARY_DIR}/installer-Windows.generated.iss)
 

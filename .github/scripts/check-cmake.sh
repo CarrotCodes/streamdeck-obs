@@ -39,6 +39,7 @@ find . -type d \( \
     -path ./\*build -o \
     -path ./deps/jansson -o \
     -path ./plugins/decklink/\*/decklink-sdk -o \
+    -path ./streamdeck-obs-plugin2 -o \
     -path ./plugins/enc-amf -o \
     -path ./plugins/mac-syphon/syphon-framework -o \
     -path ./plugins/obs-outputs/ftl-sdk -o \
