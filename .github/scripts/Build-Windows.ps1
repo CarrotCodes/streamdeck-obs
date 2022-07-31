@@ -5,7 +5,7 @@ param(
     [ValidateSet('x86', 'x64')]
     [string] $Target,
     [ValidateSet('Visual Studio 17 2022', 'Visual Studio 16 2019')]
-    [string] $CMakeGenerator = 'Visual Studio 16 2019'
+    [string] $CMakeGenerator = 'Visual Studio 17 2022'
 )
 
 $ErrorActionPreference = 'Stop'

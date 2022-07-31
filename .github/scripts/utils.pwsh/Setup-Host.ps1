@@ -30,7 +30,7 @@ function Setup-Host {
     if ( ! ( Test-Path -Path "windows-deps-${DepsVersion}-${script:Target}.zip" ) ) {
         $Params = @{
             UserAgent = 'NativeHost'
-            Uri = "https://github.com/obsproject/obs-deps/releases/download/win-${DepsVersion}/windows-deps-${DepsVersion}-${script:Target}.zip"
+            Uri = "https://github.com/obsproject/obs-deps/releases/download/${DepsVersion}/windows-deps-${DepsVersion}-${script:Target}.zip"
             OutFile = "windows-deps-${DepsVersion}-${script:Target}.zip"
             UseBasicParsing = $true
             ErrorAction = 'Stop'
@@ -71,11 +71,11 @@ function Setup-Host {
 
     Ensure-Location -Path "$(Resolve-Path -Path "${ProjectRoot}/..")/obs-build-dependencies"
 
-    if ( ! ( Test-Path -Path "windows-deps-qt-${DepsVersion}-${script:Target}.zip" ) ) {
+    if ( ! ( Test-Path -Path "windows-deps-qt6-${DepsVersion}-${script:Target}.zip" ) ) {
         $Params = @{
             UserAgent = 'NativeHost'
-            Uri = "https://cdn-fastly.obsproject.com/downloads/windows-deps-qt-${DepsVersion}-${script:Target}.zip"
-            OutFile = "windows-deps-qt-${DepsVersion}-${script:Target}.zip"
+            Uri = "https://github.com/obsproject/obs-deps/releases/download/${DepsVersion}/windows-deps-qt6-${DepsVersion}-${script:Target}.zip"
+            OutFile = "windows-deps-qt6-${DepsVersion}-${script:Target}.zip"
             UseBasicParsing = $true
             ErrorAction = 'Stop'
         }
@@ -86,7 +86,7 @@ function Setup-Host {
         Log-Status 'Found downloaded Qt.'
     }
 
-    $FileHash = Get-FileHash -Path "windows-deps-qt-${DepsVersion}-${script:Target}.zip" -Algorithm SHA256
+    $FileHash = Get-FileHash -Path "windows-deps-qt6-${DepsVersion}-${script:Target}.zip" -Algorithm SHA256
 
     if ( $FileHash.Hash.ToLower() -ne ${QtHash} ) {
         throw "Checksum mismatch of Qt download. Expected '${QtHash}', found '$(${FileHash}.Hash.ToLower())'"
@@ -96,7 +96,7 @@ function Setup-Host {
     Ensure-Location -Path "plugin-deps-${Target}"
 
     Log-Information 'Extracting Qt...'
-    Expand-ArchiveExt -Path "../windows-deps-qt-${DepsVersion}-${script:Target}.zip" -DestinationPath . -Force
+    Expand-ArchiveExt -Path "../windows-deps-qt6-${DepsVersion}-${script:Target}.zip" -DestinationPath . -Force
     Pop-Location -Stack BuildTemp
 }
 

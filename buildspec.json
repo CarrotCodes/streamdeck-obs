@@ -4,53 +4,53 @@
             "version": "27.2.3",
             "repository": "https://github.com/obsproject/obs-studio.git",
             "branch": "master",
-            "hash": "2ac9f83cb662692d34874ee1fd17ad7675597215"
+            "hash": "b4e056f39de7ffff8eb91e70e6f6a2c46e15fbb1"
         },
         "obs-deps": {
             "macos-x86_64": {
-                "version": "2022-02-13",
-                "hash": "1a8715d66e664b857942deaded0dc46c4f6cd22e88f01ed1188f3bd3fcf632c4"
+                "version": "2022-07-29",
+                "hash": "7c83e4700455b39796fb84cadf2790bac2d05c0ee47da15edf5c120702d9df9b"
             },
             "macos-arm64": {
-                "version": "2022-02-13",
-                "hash": "2cfcaf05765400c696908f242aea87b6e1848e1a48cd3edc2eb7f8cb249c9d48"
+                "version": "2022-07-29",
+                "hash": "4bd295bd854c8a20011a82ab2181f7e1ad48d05d0a259a4618fc72ef3ecd281f"
             },
             "macos-universal": {
-                "version": "2022-02-13",
-                "hash": "77471b1d345a768e8efec3f6ad9dc79f3c7cd34840b66f721b80025d29713f5d"
+                "version": "2022-07-29",
+                "hash": "6d994166e13f8bfb18eb2fda6460117664a2cb1884421bacd0dece8cc6dcbd4e"
             },
             "windows-x64": {
-                "version": "2022-03-16",
-                "hash": "ed73757d1faee1b8c4a9aeca539e1149704e430085608990771402e60074eec7"
+                "version": "2022-07-29",
+                "hash": "4a1999a6e06b03b6a272f722820efc411cd431145bcdecb149aef1de92489403"
             },
             "windows-x86": {
-                "version": "2022-03-16",
-                "hash": "4751f68488cf6d5dcc79fbf6735762154847ca509d669539b241bf4e5cbf7751"
+                "version": "2022-07-29",
+                "hash": "c70cf799811805e11ab4bcb2e408b975a4ae647797ef7254283c27cde7e0c5bc"
             }
         },
         "obs-deps-qt": {
             "macos-x86_64": {
-                "version": "2022-02-13",
-                "hash": "35a58fee8dfd70d3d2dcc0ae0b77132c04a451c6f041a02dc41b207b375fc74b"
+                "version": "2022-07-29",
+                "hash": "018552ee442ef8a7653f86460d5249e3e03c787629767af9faa85a3369fd8576"
             },
             "macos-arm64": {
-                "version": "2022-02-13",
-                "hash": "e99146b9c7775c245a2d22f2ef24fc111fccd71bad0f03b64db707124ffb8707"
+                "version": "2022-07-29",
+                "hash": "4f24e220037e1f777148ea6efbd494007cbf56848d861181e025699f66dd15bd"
             },
             "macos-universal": {
-                "version": "2022-02-13",
-                "hash": "13fbcc45fd9d08b30e702d481fe4d58b23f93aa06848cede4ebe0956c79a5e8a"
+                "version": "2022-07-29",
+                "hash": "c1dd451d86f5bb6ba86f4c97f2b0b11a9fa49d14fb91f2ec0934adf2b420477d"
             },
             "windows-x64": {
-                "version": "2022-03-16",
-                "hash": "4a5faed9bad327be079e08ed6715a287db8936d20e51b9cdfc7eb52d0a57c629"
+                "version": "2022-07-29",
+                "hash": "a5f637dd6ddcc5b9b04073af30b2f8edaa8df24948ae89bdfe623bfc24db5cad"
             },
             "windows-x86": {
-                "version": "2022-03-16",
-                "hash": "6664bc60523a8c7c08690f6b800d8d57d830605b9c25d2ce41132c422b0c6e29"
+                "version": "2022-07-29",
+                "hash": "129d82cfab8d350ce1e5cbd4a16a3160641f142b18566fa8c01de8c1ca1f24e5"
             }
         }
     },
     "name": "StreamDeckPlugin-carrot",
-    "version": "1.0.0"
+    "version": "1.1.0"
 }

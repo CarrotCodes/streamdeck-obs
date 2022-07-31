@@ -64,10 +64,17 @@ mkcd obs-plugin-deps
 XZ_OPT=-T0 tar -xzf ../macos-deps-${deps_version}-${target##*-}.tar.xz && log_status 'obs-deps extracted.'
 popd
 
+QT_TARGET="$target"
+QT_ARCH="${target##*-}"
+if (( ${+CI} )) {
+  QT_TARGET="macos-universal"
+  QT_ARCH="universal"
+}
+
 pushd ${project_root}
 log_info 'Setting up Qt...'
 read -r qt_version qt_hash <<< \
-  "$(jq -r --arg key "obs-deps-qt" --arg target "${target}" \
+  "$(jq -r --arg key "obs-deps-qt" --arg target "${QT_TARGET}" \
     '.dependencies[$key][$target] | {version, hash} | join(" ")' \
     ${buildspec_file})"
 
@@ -79,15 +86,15 @@ log_status 'Found Qt specification.'
 
 mkcd ${project_root:h}/obs-build-dependencies
 
-if [[ ! -f macos-deps-qt-${deps_version}-${target##*-}.tar.xz ]] {
+if [[ ! -f macos-deps-qt6-${deps_version}-${QT_ARCH}.tar.xz ]] {
   curl ${curl_opts} \
-    "https://github.com/obsproject/obs-deps/releases/download/${deps_version}/macos-deps-qt-${deps_version}-${target##*-}.tar.xz" && \
-    log_status "Downloaded Qt for ${target}"
+    "https://github.com/obsproject/obs-deps/releases/download/${deps_version}/macos-deps-qt6-${deps_version}-${QT_ARCH}.tar.xz" && \
+    log_status "Downloaded Qt for ${QT_ARCH}"
 } else {
   log_status 'Found downloaded Qt.'
 }
 
-read -r artifact_checksum _ <<< "$(sha256sum macos-deps-qt-${deps_version}-${target##*-}.tar.xz)"
+read -r artifact_checksum _ <<< "$(sha256sum macos-deps-qt6-${deps_version}-${QT_ARCH}.tar.xz)"
 if [[ ${qt_hash} != ${artifact_checksum} ]] {
   log_error "Checksum of downloaded Qt does not match specification.
 Expected : ${qt_hash}
@@ -97,8 +104,9 @@ Actual   : ${artifact_checksum}"
 log_status 'Checksum of downloaded Qt matches.'
 
 mkcd obs-plugin-deps
-XZ_OPT=-T0 tar -xzf ../macos-deps-qt-${qt_version}-${target##*-}.tar.xz && log_status 'Qt extracted.'
+XZ_OPT=-T0 tar -xzf ../macos-deps-qt6-${qt_version}-${QT_ARCH}.tar.xz && log_status 'Qt extracted.'
 
 xattr -r -d com.apple.quarantine *
 log_status 'Removed quarantine flag from downloaded dependencies...'
+
 popd

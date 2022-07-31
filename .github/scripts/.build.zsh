@@ -16,6 +16,26 @@ setopt FUNCTION_ARGZERO
 #setopt WARN_NESTED_VAR
 #setopt XTRACE
 
+check_archs() {
+    log_info "Check Architecture..."
+    TARGET_ARCH=${TARGET_ARCH:-"${host_os}-${CPUTYPE}"}
+    if [ "${TARGET_ARCH}" = "macos-universal" ]; then
+      ARCH="universal"
+      CMAKE_ARCHS="x86_64;arm64"
+    elif [ "${TARGET_ARCH}" = "macos-x86_64" ]; then
+      ARCH="x86_64"
+      CMAKE_ARCHS="x86_64"
+    elif [ "${TARGET_ARCH}" = "macos-arm64" ]; then
+      ARCH="arm64"
+      CMAKE_ARCHS="arm64"
+    elif [ "${TARGET_ARCH}" = "linux-x86_64" ]; then
+      ARCH="x86_64"
+      CMAKE_ARCHS="x86_64"
+    else
+      log_error "Unsupported architecture '${TARGET_ARCH}' provided"
+    fi
+}
+
 autoload -Uz is-at-least && if ! is-at-least 5.2; then
   print -u2 -PR "%F{1}${funcstack[1]##*/}:%f Running on Zsh version %B${ZSH_VERSION}%b, but Zsh %B5.2%b is the minimum supported version. Upgrade Zsh to fix this issue."
   exit 1
@@ -95,6 +115,7 @@ Usage: %B${functrace[1]%:*}%b <option> [<options>]
           exit 2
         }
         target=${2}
+        TARGET_ARCH="$target"
         shift 2
         ;;
       -c|--config)
@@ -119,6 +140,7 @@ Usage: %B${functrace[1]%:*}%b <option> [<options>]
   set -- ${(@)args}
   set_loglevel ${_verbosity}
 
+  check_archs
   check_${host_os}
   setup_${host_os}
 
@@ -159,8 +181,8 @@ Usage: %B${functrace[1]%:*}%b <option> [<options>]
       }
 
       cmake_args+=(
-        -DCMAKE_OSX_ARCHITECTURES=${${target##*-}//universal/x86_64;arm64}
-        -DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET:-10.15}
+        -DCMAKE_OSX_ARCHITECTURES=${CMAKE_ARCHS}
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET:-11.0}
         -DOBS_BUNDLE_CODESIGN_IDENTITY="${CODESIGN_IDENT:--}"
         -DCMAKE_FRAMEWORK_PATH="${project_root:h}/obs-build-dependencies/obs-plugin-deps/Frameworks"
       )

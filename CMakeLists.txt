@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16...3.21)
 
 # Change obs-plugintemplate to your plugin's name in a machine-readable format
 # (e.g.: obs-myawesomeplugin) and set
-project(StreamDeckPlugin-carrot VERSION 1.0.0)
+project(StreamDeckPlugin-carrot VERSION 1.1.0)
 add_library(${CMAKE_PROJECT_NAME} MODULE)
 
 # Replace `Your Name Here` with the name (yours or your organization's) you want
@@ -24,6 +24,7 @@ set(LINUX_MAINTAINER_EMAIL "obs@carrot.blog")
 target_sources(
   ${CMAKE_PROJECT_NAME}
   PRIVATE "src/plugin-main.cpp"
+          "src/handler-obs-frontend.cpp"
           "streamdeck-obs-plugin2/source/module.hpp"
           "streamdeck-obs-plugin2/source/server.hpp"
           "streamdeck-obs-plugin2/source/server.cpp"
@@ -34,7 +35,6 @@ target_sources(
           "streamdeck-obs-plugin2/source/handlers/handler-system.hpp"
           "streamdeck-obs-plugin2/source/handlers/handler-system.cpp"
           "streamdeck-obs-plugin2/source/handlers/handler-obs-frontend.hpp"
-          "streamdeck-obs-plugin2/source/handlers/handler-obs-frontend.cpp"
           "streamdeck-obs-plugin2/source/handlers/handler-obs-source.hpp"
           "streamdeck-obs-plugin2/source/handlers/handler-obs-source.cpp"
           "streamdeck-obs-plugin2/source/handlers/handler-obs-scene.hpp"
