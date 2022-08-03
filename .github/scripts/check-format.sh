@@ -44,11 +44,7 @@ fi
 find . -type d \( \
     -path ./\*build -o \
     -path ./cmake -o \
-    -path ./plugins/decklink/\*/decklink-sdk -o \
-    -path ./plugins/enc-amf -o \
-    -path ./plugins/mac-syphon/syphon-framework -o \
-    -path ./plugins/obs-outputs/ftl-sdk -o \
-    -path ./plugins/obs-websocket/deps \
+    -path ./streamdeck-obs-plugin2 \
 \) -prune -false -type f -o \
     -name '*.h' -or \
     -name '*.hpp' -or \
