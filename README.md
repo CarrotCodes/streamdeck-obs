@@ -1,6 +1,6 @@
 # OBS Plugin Template
 
-This is a port of Elgato's Stream Deck plugin to OBS' newest plugin template. It isn't endorsed by Elgato. I did it to make an Apple Silicon build of the plugin, for personal use.
+This is a port of Elgato's Stream Deck plugin to OBS' newest plugin template. It isn't endorsed by Elgato. I did it to make an Apple Silicon build of the plugin, for OBS 28 (which also uses Qt 6).
 
 Almost all of the source code is linked via the `streamdeck-obs-plugin2` submodule. The plugin entry point changed a little, so there's a copy of the original `module.cpp` with some tweaks, called `plugin-main.cpp`. 
 
