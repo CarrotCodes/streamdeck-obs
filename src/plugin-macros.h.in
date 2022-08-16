@@ -26,7 +26,7 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #define STREAMDECK_VERSION_PATCH @PROJECT_VERSION_PATCH@
 #define STREAMDECK_VERSION_BUILD @PROJECT_VERSION_TWEAK@
 #define STREAMDECK_COMMIT "@PROJECT_COMMIT@"
-#define STREAMDECK_VERSION "@VERSION_STRING@"
+#define STREAMDECK_VERSION "@CMAKE_PROJECT_VERSION@"
 
 #define blog(level, msg, ...) blog(level, "[" PLUGIN_NAME "] " msg, ##__VA_ARGS__)
 

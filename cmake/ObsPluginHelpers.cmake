@@ -179,8 +179,7 @@ if(OS_POSIX)
       -Wvla
       -Wformat
       -Wformat-security
-      # -Wswitch
-      # -Wunused-parameter
+      # -Wswitch -Wunused-parameter
       -Wno-unused-function
       -Wno-missing-field-initializers
       -fno-strict-aliasing
@@ -550,7 +549,7 @@ else()
         ${CMAKE_PROJECT_NAME}
         PRIVATE /MP
                 /W3
-                /WX
+                # /WX
                 /wd4201
                 "$<$<CONFIG:RELWITHDEBINFO>:/Ob2>"
                 "$<$<CONFIG:DEBUG>:/DDEBUG=1;/D_DEBUG=1>"

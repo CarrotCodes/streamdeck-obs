@@ -10,6 +10,7 @@
 
 # ignore generated files
 *.generated.*
+src/version.hpp
 **/.Brewfile.lock.json
 
 cmake-build-*
