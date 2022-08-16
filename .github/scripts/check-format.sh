@@ -42,7 +42,8 @@ else
 fi
 
 find . -type d \( \
-    -path ./\*build -o \
+    -path ./\*build\* -o \
+    -path ./release -o \
     -path ./cmake -o \
     -path ./streamdeck-obs-plugin2 \
 \) -prune -false -type f -o \

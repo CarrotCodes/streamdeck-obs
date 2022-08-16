@@ -1,26 +1,23 @@
 cmake_minimum_required(VERSION 3.16...3.21)
 
-# Change obs-plugintemplate to your plugin's name in a machine-readable format
-# (e.g.: obs-myawesomeplugin) and set
-project(StreamDeckPlugin-carrot VERSION 1.2.0)
+# Change obs-plugintemplate to your plugin's name in a machine-readable format (e.g.:
+# obs-myawesomeplugin) and set
+project(StreamDeckPlugin-carrot VERSION 1.3.0)
 add_library(${CMAKE_PROJECT_NAME} MODULE)
 
-# Replace `Your Name Here` with the name (yours or your organization's) you want
-# to see as the author of the plugin (in the plugin's metadata itself and in the
-# installers)
+# Replace `Your Name Here` with the name (yours or your organization's) you want to see as the
+# author of the plugin (in the plugin's metadata itself and in the installers)
 set(PLUGIN_AUTHOR "Carrot")
 
-# Replace `com.example.obs-plugin-template` with a unique Bundle ID for macOS
-# releases (used both in the installer and when submitting the installer for
-# notarization)
+# Replace `com.example.obs-plugin-template` with a unique Bundle ID for macOS releases (used both in
+# the installer and when submitting the installer for notarization)
 set(MACOS_BUNDLEID "blog.carrot.${CMAKE_PROJECT_NAME}")
 
-# Replace `me@contoso.com` with the maintainer email address you want to put in
-# Linux packages
+# Replace `me@contoso.com` with the maintainer email address you want to put in Linux packages
 set(LINUX_MAINTAINER_EMAIL "obs@carrot.blog")
 
-# Add your custom source files here - header files are optional and only
-# required for visibility e.g. in Xcode or Visual Studio
+# Add your custom source files here - header files are optional and only required for visibility
+# e.g. in Xcode or Visual Studio
 target_sources(
   ${CMAKE_PROJECT_NAME}
   PRIVATE "src/plugin-main.cpp"
@@ -43,38 +40,43 @@ target_sources(
 add_compile_definitions(ASIO_STANDALONE)
 add_compile_definitions(_WEBSOCKETPP_CPP11_STL_)
 target_include_directories(
+  ${CMAKE_PROJECT_NAME} PRIVATE "streamdeck-obs-plugin2/third-party/nlohmann-json/single_include/")
+target_include_directories(${CMAKE_PROJECT_NAME}
+                           PRIVATE "streamdeck-obs-plugin2/third-party/websocketpp/")
+target_include_directories(${CMAKE_PROJECT_NAME}
+                           PRIVATE "streamdeck-obs-plugin2/third-party/asio/asio/include/")
+
+# Import libobs as main plugin dependency
+find_package(libobs REQUIRED)
+include(cmake/ObsPluginHelpers.cmake)
+
+# Uncomment these lines if you want to use the OBS Frontend API in your plugin
+find_package(obs-frontend-api REQUIRED)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE OBS::obs-frontend-api)
+
+# Uncomment those lines if you want to use Qt in your plugin
+find_qt(COMPONENTS Widgets Core)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt::Core Qt::Widgets)
+set_target_properties(
   ${CMAKE_PROJECT_NAME}
-  PRIVATE "streamdeck-obs-plugin2/third-party/nlohmann-json/single_include/")
-target_include_directories(
-  ${CMAKE_PROJECT_NAME}
-  PRIVATE "streamdeck-obs-plugin2/third-party/websocketpp/")
-target_include_directories(
-  ${CMAKE_PROJECT_NAME}
-  PRIVATE "streamdeck-obs-plugin2/third-party/asio/asio/include/")
+  PROPERTIES AUTOMOC ON
+             AUTOUIC ON
+             AUTORCC ON)
+
+configure_file(src/plugin-macros.h.in ${CMAKE_SOURCE_DIR}/src/plugin-macros.generated.h)
+configure_file(src/plugin-macros.h.in ${CMAKE_SOURCE_DIR}/src/version.hpp)
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/plugin-macros.generated.h)
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/version.hpp)
 
 # /!\ TAKE NOTE: No need to edit things past this point /!\
 
-find_package(libobs REQUIRED)
-find_package(obs-frontend-api REQUIRED)
-include(cmake/ObsPluginHelpers.cmake)
-find_qt(COMPONENTS Widgets Core)
-
-configure_file(src/plugin-macros.h.in
-               ${CMAKE_SOURCE_DIR}/src/plugin-macros.generated.h)
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/plugin-macros.generated.h)
-
 # --- Platform-independent build settings ---
 
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src)
 target_include_directories(${CMAKE_PROJECT_NAME}
-                           PRIVATE ${CMAKE_SOURCE_DIR}/src)
-target_include_directories(
-  ${CMAKE_PROJECT_NAME}
-  PRIVATE ${CMAKE_SOURCE_DIR}/streamdeck-obs-plugin2/source)
-target_include_directories(
-  ${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/streamdeck-obs-plugin2/ui)
-target_link_libraries(
-  ${CMAKE_PROJECT_NAME} PRIVATE OBS::libobs OBS::obs-frontend-api Qt::Core
-                                Qt::Widgets)
+                           PRIVATE ${CMAKE_SOURCE_DIR}/streamdeck-obs-plugin2/source)
+target_include_directories(${CMAKE_PROJECT_NAME}
+                           PRIVATE ${CMAKE_SOURCE_DIR}/streamdeck-obs-plugin2/ui)
 
 set_target_properties(
   ${CMAKE_PROJECT_NAME}
@@ -85,20 +87,19 @@ set_target_properties(
     "${PROJECT_SOURCE_DIR};${CMAKE_SOURCE_DIR}/streamdeck-obs-plugin2/source;${CMAKE_SOURCE_DIR}/streamdeck-obs-plugin2/ui"
     AUTORCC ON)
 
-target_compile_features(${CMAKE_PROJECT_NAME} PRIVATE cxx_std_17)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE OBS::libobs)
 
 # --- End of section ---
 
 # --- Windows-specific build settings and tasks ---
 if(OS_WINDOWS)
-  target_sources(${CMAKE_PROJECT_NAME}
-                 PRIVATE streamdeck-obs-plugin2/source/windll.cpp)
+  target_sources(${CMAKE_PROJECT_NAME} PRIVATE streamdeck-obs-plugin2/source/windll.cpp)
   list(APPEND PROJECT_LIBRARIES Delayimp.lib)
   configure_file(cmake/bundle/windows/installer-Windows.iss.in
                  ${CMAKE_BINARY_DIR}/installer-Windows.generated.iss)
 
   if(MSVC)
-    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE /MP /d2FH4-)
+    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE /W4)
   endif()
   # --- End of section ---
 
@@ -111,19 +112,12 @@ elseif(OS_MACOS)
   set(MACOSX_PLUGIN_BUNDLE_VERSION "${CMAKE_PROJECT_VERSION}")
   set(MACOSX_PLUGIN_SHORT_VERSION_STRING "1")
 
-  target_compile_options(
-    ${CMAKE_PROJECT_NAME}
-    PRIVATE -Wall -Wextra -Werror-implicit-function-declaration -stdlib=libc++
-            -fvisibility=default)
-
-  set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES PREFIX "")
+  target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall)
   # --- End of section ---
 
   # --- Linux-specific build settings and tasks ---
 else()
-  target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Wextra)
-
-  set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES PREFIX "")
+  target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall)
 endif()
 # --- End of section ---
 
