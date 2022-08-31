@@ -1,8 +1,14 @@
+This repository is now archived, because Elgato added native support for Stream Deck in their own plugin 🎉. Please see this support document for instructions: https://help.elgato.com/hc/en-us/articles/8815141056013-Elgato-Stream-Deck-Plugin-Update-for-OBS-Studio-28
+
+If the plugin helped you beta test OBS 28, please consider [sponsoring](https://www.carrot.blog/sponsor) my open-source work, and [following me on Twitter](https://www.twitter.com/carrotcodes) or [on GitHub](https://github.com/CarrotCodes/) to hear about what I'm up to 🥰.
+
+---
+
 # OBS Plugin Template
 
 This is a port of Elgato's Stream Deck plugin to OBS' newest plugin template. It isn't endorsed by Elgato. I did it to make an Apple Silicon build of the plugin, for OBS 28 (which also uses Qt 6). I wrote a little more about my motivations on my website: https://www.carrot.blog/posts/2022/08/streamdeck-obs-28/
 
-Almost all of the source code is linked via the `streamdeck-obs-plugin2` submodule. The plugin entry point changed a little, so there's a copy of the original `module.cpp` with some tweaks, called `plugin-main.cpp`. 
+Almost all of the source code is linked via the `streamdeck-obs-plugin2` submodule. The plugin entry point changed a little, so there's a copy of the original `module.cpp` with some tweaks, called `plugin-main.cpp`.
 
 The original plugin repository is here: https://github.com/elgatosf/streamdeck-obs-plugin2
 
